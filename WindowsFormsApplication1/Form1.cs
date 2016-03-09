@@ -16,6 +16,25 @@ namespace WindowsFormsApplication1
         private Bitmap imageDisplayed = null;
         private Color color;
         Point point;
+        ImageForm imageForm;
+        bool zoomed = false;
+
+        public String RboxText
+        {
+            get { return RBox.Text; }
+            set { RBox.Text = value; }
+        }
+
+        public String GboxText
+        {
+            get { return GBox.Text; }
+            set { GBox.Text = value; }
+        }
+        public String BboxText
+        {
+            get { return BBox.Text; }
+            set { BBox.Text = value; }
+        }
         public Form1()
         {
             InitializeComponent();
@@ -35,16 +54,18 @@ namespace WindowsFormsApplication1
         {
             int size = -1;
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "BMP Files (*.bmp)|*.bmp|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif | TIF Files(*.tif) | *.tif";
-            dialog.InitialDirectory = @"C:\";
-            dialog.Title = "Please select an image file to encrypt.";
+            //dialog.Filter = "BMP Files (*.bmp)|*.bmp|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif | TIF Files(*.tif) | *.tif";
+            dialog.InitialDirectory = @"C:\Users\lukasz\Desktop\b_kon";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string file = dialog.FileName;
                 try
                 {
-                imageDisplayed = new Bitmap(dialog.FileName);
-                    pictureBox1.Image = imageDisplayed;
+                    imageDisplayed = new Bitmap(dialog.FileName);
+                    ImageForm imageForm = new ImageForm(this, imageDisplayed);
+                    this.imageForm = imageForm;
+                    imageForm.Show();
+                    //pictureBox1.Image = imageDisplayed;
                 }
                 catch (IOException)
                 {
@@ -61,19 +82,9 @@ namespace WindowsFormsApplication1
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            Rbox.Text = "";
-            Gbox.Text = "";
-            Bbox.Text = "";
-            MouseEventArgs me = (MouseEventArgs)e;
-            point = me.Location;
-            if (imageDisplayed != null)
-            {
-                color = imageDisplayed.GetPixel((int)point.X, (int)point.Y);
-                Rbox.Text = color.R.ToString();
-                Gbox.Text = color.G.ToString();
-                Bbox.Text = color.B.ToString();
-            }
+            
         }
+
 
         private void pictureBox1_MouseEnter(object sender, EventArgs e)
         {
@@ -81,20 +92,36 @@ namespace WindowsFormsApplication1
 
         private void pictureBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            MouseEventArgs me = (MouseEventArgs)e;
-            point = me.Location;
-            if (imageDisplayed != null)
-            {
-                color = Color.FromArgb(0, 0, 0, 0);
-                imageDisplayed.SetPixel((int)point.X, (int)point.Y, color);
-                pictureBox1.Image = imageDisplayed;
-                Rbox.Text = color.R.ToString();
-                Gbox.Text = color.G.ToString();
-                Bbox.Text = color.B.ToString();
-            }
+            
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (!zoomed)
+            {
+                imageForm.ZoomIn();
+                button1.Text = "Zoom out";
+                zoomed = true;
+            }
+            else if(zoomed)
+            {
+                imageForm.ZoomOut();
+                button1.Text = "Zoom in";
+                zoomed = false;
+            }
+            
+        }
+
+        private void button4_Click(object sender, EventArgs e)
         {
         }
     }
