@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BBox = new System.Windows.Forms.TextBox();
+            this.GBox = new System.Windows.Forms.TextBox();
+            this.RBox = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -36,11 +41,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.RBox = new System.Windows.Forms.TextBox();
-            this.GBox = new System.Windows.Forms.TextBox();
-            this.BBox = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,6 +61,47 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(143, 234);
             this.panel1.TabIndex = 0;
+            // 
+            // BBox
+            // 
+            this.BBox.Location = new System.Drawing.Point(35, 199);
+            this.BBox.Name = "BBox";
+            this.BBox.Size = new System.Drawing.Size(43, 20);
+            this.BBox.TabIndex = 13;
+            // 
+            // GBox
+            // 
+            this.GBox.Location = new System.Drawing.Point(35, 173);
+            this.GBox.Name = "GBox";
+            this.GBox.Size = new System.Drawing.Size(43, 20);
+            this.GBox.TabIndex = 12;
+            // 
+            // RBox
+            // 
+            this.RBox.Location = new System.Drawing.Point(35, 147);
+            this.RBox.Name = "RBox";
+            this.RBox.Size = new System.Drawing.Size(43, 20);
+            this.RBox.TabIndex = 11;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(12, 110);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(114, 23);
+            this.button4.TabIndex = 10;
+            this.button4.Text = "Change pixel";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(12, 70);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(114, 23);
+            this.button3.TabIndex = 9;
+            this.button3.Text = "Save image to file";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button2
             // 
@@ -114,46 +155,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(12, 70);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(114, 23);
-            this.button3.TabIndex = 9;
-            this.button3.Text = "Save file";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(12, 110);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(114, 23);
-            this.button4.TabIndex = 10;
-            this.button4.Text = "Change pixel";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // RBox
-            // 
-            this.RBox.Location = new System.Drawing.Point(35, 147);
-            this.RBox.Name = "RBox";
-            this.RBox.Size = new System.Drawing.Size(43, 20);
-            this.RBox.TabIndex = 11;
-            // 
-            // GBox
-            // 
-            this.GBox.Location = new System.Drawing.Point(35, 173);
-            this.GBox.Name = "GBox";
-            this.GBox.Size = new System.Drawing.Size(43, 20);
-            this.GBox.TabIndex = 12;
-            // 
-            // BBox
-            // 
-            this.BBox.Location = new System.Drawing.Point(35, 199);
-            this.BBox.Name = "BBox";
-            this.BBox.Size = new System.Drawing.Size(43, 20);
-            this.BBox.TabIndex = 13;
             // 
             // Form1
             // 

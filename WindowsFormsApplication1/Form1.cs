@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace WindowsFormsApplication1
         private Color color;
         Point point;
         ImageForm imageForm;
-        bool zoomed = false;
+        public bool zoomed = false;
 
         public String RboxText
         {
@@ -118,11 +119,41 @@ namespace WindowsFormsApplication1
                 button1.Text = "Zoom in";
                 zoomed = false;
             }
+            imageForm.SetImage();
             
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
+            Color rgb = Color.FromArgb(int.Parse(RBox.Text), int.Parse(GBox.Text), int.Parse(BBox.Text));
+            imageForm.ChangePixel(rgb);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "Images|*.bmp;*.png;*.jpg";
+            ImageFormat format = ImageFormat.Bmp;
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string ext = System.IO.Path.GetExtension(saveFileDialog1.FileName);
+                switch (ext)
+                {
+                    case ".jpg":
+                        format = ImageFormat.Jpeg;
+                        break;
+                    case ".png":
+                        format = ImageFormat.Png;
+                        break;
+                }
+                imageForm.GetImage().Save(saveFileDialog1.FileName, format);
+            }
+            if (zoomed)
+                imageForm.ZoomIn();
         }
     }
     
