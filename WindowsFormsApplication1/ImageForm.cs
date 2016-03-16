@@ -112,12 +112,41 @@ namespace WindowsFormsApplication1
                 Color = image.GetPixel((int)Point.X, (int)Point.Y);
 
             //Point point = me.GetPosition(pict);
-            
+
 
             //Debug.WriteLine("X: " + point.X + "\n Y: " + point.Y);
 
             //Color = image.GetPixel(e.X, e.Y);
-            
+
+            //string siema = Color.ToString();
+            //Debug.WriteLine("Siema: {0}", siema);
+
+            mainForm.RboxText = Color.R.ToString();
+            mainForm.GboxText = Color.G.ToString();
+            mainForm.BboxText = Color.B.ToString();
+        }
+
+        private void pictureBox1_MouseHover(object sender, EventArgs e)
+        {
+            MouseEventArgs me = (MouseEventArgs)e;
+            Point = me.Location;
+
+            if (mainForm.zoomed)
+            {
+                ZoomOut();
+                Color = image.GetPixel((int)Point.X, (int)Point.Y);
+                ZoomIn();
+            }
+            else if (!mainForm.zoomed)
+                Color = image.GetPixel((int)Point.X, (int)Point.Y);
+
+            //Point point = me.GetPosition(pict);
+
+
+            //Debug.WriteLine("X: " + point.X + "\n Y: " + point.Y);
+
+            //Color = image.GetPixel(e.X, e.Y);
+
             //string siema = Color.ToString();
             //Debug.WriteLine("Siema: {0}", siema);
 
