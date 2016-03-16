@@ -105,11 +105,15 @@ namespace WindowsFormsApplication1
             if (mainForm.zoomed)
             {
                 ZoomOut();
-                Color = image.GetPixel((int)Point.X, (int)Point.Y);
+                Point = me.Location;
+                Color = image.GetPixel((int)Point.X/8, (int)Point.Y/8);
                 ZoomIn();
             }
             else if (!mainForm.zoomed)
+            {
+                Point = me.Location;
                 Color = image.GetPixel((int)Point.X, (int)Point.Y);
+            }
 
             //Point point = me.GetPosition(pict);
 
