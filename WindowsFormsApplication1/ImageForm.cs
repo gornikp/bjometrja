@@ -20,6 +20,7 @@ namespace WindowsFormsApplication1
         private Bitmap image = null;
         private Bitmap imageZoomCache = null;
         private Bitmap zoomedImage = null;
+        List<Point> elo = new List<Point>();
 
         public ImageForm()
         {
@@ -99,6 +100,7 @@ namespace WindowsFormsApplication1
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
+            pictureBox1.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             MouseEventArgs me = (MouseEventArgs)e;
             Point = me.Location;
 
@@ -114,7 +116,6 @@ namespace WindowsFormsApplication1
                 Point = me.Location;
                 Color = image.GetPixel((int)Point.X, (int)Point.Y);
             }
-
             //Point point = me.GetPosition(pict);
 
 
@@ -130,20 +131,26 @@ namespace WindowsFormsApplication1
             mainForm.BboxText = Color.B.ToString();
         }
 
-        private void pictureBox1_MouseHover(object sender, EventArgs e)
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            MouseEventArgs me = (MouseEventArgs)e;
-            Point = me.Location;
+            //MouseEventArgs me = (MouseEventArgs)e;
+            Point p = pictureBox1.PointToClient(Cursor.Position);
+            Color c = Color.Black;
+            //Point = e;
 
             if (mainForm.zoomed)
             {
                 ZoomOut();
-                Color = image.GetPixel((int)Point.X, (int)Point.Y);
+                //Point = p;
+                c = image.GetPixel((int)p.X / 8, (int)p.Y / 8);
                 ZoomIn();
             }
             else if (!mainForm.zoomed)
-                Color = image.GetPixel((int)Point.X, (int)Point.Y);
-
+            {
+                //Point = p;
+                c = image.GetPixel((int)p.X, (int)p.Y);
+            }
+            elo.Add(Point);
             //Point point = me.GetPosition(pict);
 
 
@@ -154,9 +161,14 @@ namespace WindowsFormsApplication1
             //string siema = Color.ToString();
             //Debug.WriteLine("Siema: {0}", siema);
 
-            mainForm.RboxText = Color.R.ToString();
-            mainForm.GboxText = Color.G.ToString();
-            mainForm.BboxText = Color.B.ToString();
+            mainForm.RboxText = c.R.ToString();
+            mainForm.GboxText = c.G.ToString();
+            mainForm.BboxText = c.B.ToString();
+        }
+
+        private void pictureBox1_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
         }
     }
 }
