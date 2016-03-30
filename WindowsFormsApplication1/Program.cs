@@ -14,6 +14,8 @@ namespace WindowsFormsApplication1
         [STAThread]
         static void Main()
         {
+            int a = (255 + 255 + 236) / 3;
+            Console.WriteLine(a);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
