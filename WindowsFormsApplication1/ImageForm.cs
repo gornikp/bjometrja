@@ -21,6 +21,10 @@ namespace WindowsFormsApplication1
         private Bitmap imageZoomCache = null;
         private Bitmap zoomedImage = null;
 
+        public Bitmap getImage()
+        {
+            return image;
+        }
         public ImageForm()
         {
             InitializeComponent();
@@ -44,6 +48,18 @@ namespace WindowsFormsApplication1
             SetImage();
             
         }
+
+        public void ChangeBitmap(Bitmap image)
+        {
+            Bitmap IndexedImage = image;
+            Bitmap bitmap = IndexedImage.Clone(new Rectangle(0, 0, IndexedImage.Width, IndexedImage.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            this.image = bitmap;
+
+            this.Width = this.image.Width;
+            this.Height = this.image.Height;
+            SetImage();
+        }
+
         public void SetImage()
         {
             pictureBox1.Width = this.image.Width;

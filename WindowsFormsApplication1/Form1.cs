@@ -17,7 +17,7 @@ namespace WindowsFormsApplication1
         private Bitmap imageDisplayed = null;
         private Color color;
         Point point;
-        ImageForm imageForm;
+        public ImageForm imageForm;
         public bool zoomed = false;
 
         public String RboxText
@@ -56,7 +56,7 @@ namespace WindowsFormsApplication1
             int size = -1;
             OpenFileDialog dialog = new OpenFileDialog();
             //dialog.Filter = "BMP Files (*.bmp)|*.bmp|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif | TIF Files(*.tif) | *.tif";
-            dialog.InitialDirectory = @"C:\Users\lukasz\Desktop\b_kon";
+            dialog.InitialDirectory = @"C:\Users\lukasz\Desktop\b_kon\zad2";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string file = dialog.FileName;
@@ -154,6 +154,152 @@ namespace WindowsFormsApplication1
             }
             if (zoomed)
                 imageForm.ZoomIn();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            imageDisplayed = imageForm.getImage();
+            Histogram histogram = new Histogram(this, imageDisplayed);
+            histogram.Show();
+        }
+
+        private void ChangeBrightness(int b)
+        {
+            imageDisplayed = imageForm.getImage();
+            byte[] LUT = new byte[256];
+            for (int i = 0; i < 256; i++)
+            {
+                if ((b + i) > 255)
+                {
+                    LUT[i] = 255;
+                }
+                else if ((b + i) < 0)
+                {
+                    LUT[i] = 0;
+                }
+                else
+                {
+                    LUT[i] = (byte)(b + i);
+                }
+            }
+
+            Bitmap bitmap = (Bitmap)imageDisplayed.Clone();
+
+            BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
+            byte[] pixelValues = new byte[Math.Abs(bmpData.Stride) * bitmap.Height];
+            System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, pixelValues, 0, pixelValues.Length);
+
+            for (int i = 0; i < pixelValues.Length; i++)
+            {
+                pixelValues[i] = LUT[pixelValues[i]];
+            }
+
+            System.Runtime.InteropServices.Marshal.Copy(pixelValues, 0, bmpData.Scan0, pixelValues.Length);
+            bitmap.UnlockBits(bmpData);
+            imageForm.ChangeBitmap(bitmap);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            ChangeBrightness(15);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            ChangeBrightness(-15);
+        }
+
+        private void Stretch()
+        {
+            imageDisplayed = imageForm.getImage();
+
+            byte[] LUT = new byte[256];
+            byte vMaxR = (byte)Int32.Parse(textBox2.Text);
+            byte vMinR = (byte)Int32.Parse(textBox1.Text);
+            byte iMax = 255;
+            for (int i = 0; i < 256; i++)
+            {
+                if (i > vMaxR)
+                {
+                    LUT[i] = 255;
+                }
+                else if (i < vMinR)
+                {
+                    LUT[i] = 0;
+                }
+                else
+                {
+                    LUT[i] = (byte)(iMax / (vMaxR - vMinR) * (i - vMinR));
+                }
+            }
+            Bitmap bitmap = (Bitmap)imageDisplayed.Clone();
+
+            BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
+            byte[] pixelValues = new byte[Math.Abs(bmpData.Stride) * bitmap.Height];
+            System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, pixelValues, 0, pixelValues.Length);
+
+            for (int i = 0; i < pixelValues.Length; i++)
+            {
+                pixelValues[i] = LUT[pixelValues[i]];
+            }
+
+            System.Runtime.InteropServices.Marshal.Copy(pixelValues, 0, bmpData.Scan0, pixelValues.Length);
+            bitmap.UnlockBits(bmpData);
+            imageForm.ChangeBitmap(bitmap);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Stretch();
+        }
+
+        //private void histogramEqualization()
+        //{
+        //    imageDisplayed = imageForm.getImage();
+
+        //    Bitmap renderedImage = imageDisplayed;
+
+        //    uint pixels = (uint)renderedImage.Height * (uint)renderedImage.Width;
+        //    decimal Const = 255 / (decimal)pixels;
+
+        //    int x, y, R, G, B;
+
+        //    ImageStatistics statistics = new ImageStatistics(renderedImage);
+
+
+        //    //Create histogram arrays for R,G,B channels
+        //    int[] cdfR = statistics.Red.Values.ToArray();
+        //    int[] cdfG = statistics.Green.Values.ToArray();
+        //    int[] cdfB = statistics.Blue.Values.ToArray();
+
+        //    //Convert arrays to cumulative distribution frequency data
+        //    for (int r = 1; r <= 255; r++)
+        //    {
+        //        cdfR[r] = cdfR[r] + cdfR[r - 1];
+        //        cdfG[r] = cdfG[r] + cdfG[r - 1];
+        //        cdfB[r] = cdfB[r] + cdfB[r - 1];
+        //    }
+
+        //    for (y = 0; y < renderedImage.Height; y++)
+        //    {
+        //        for (x = 0; x < renderedImage.Width; x++)
+        //        {
+        //            Color pixelColor = renderedImage.GetPixel(x, y);
+
+        //            R = (int)((decimal)cdfR[pixelColor.R] * Const);
+        //            G = (int)((decimal)cdfG[pixelColor.G] * Const);
+        //            B = (int)((decimal)cdfB[pixelColor.B] * Const);
+
+        //            Color newColor = Color.FromArgb(R, G, B);
+        //            renderedImage.SetPixel(x, y, newColor);
+        //        }
+        //    }
+        //    imageForm.ChangeBitmap(renderedImage);
+        //}
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+           // histogramEqualization();
         }
     }
     
