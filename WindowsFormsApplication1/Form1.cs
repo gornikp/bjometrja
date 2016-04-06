@@ -20,19 +20,6 @@ namespace WindowsFormsApplication1
         public ImageForm imageForm;
         public bool zoomed = false;
 
-        #region equal
-        //public int Depth { get; private set; }
-        //int[] redHistogram;
-        //int[] greenHistogram;
-        //int[] blueHistogram;
-        //int[] allHistogram;
-        //List<byte[]> LUT;
-        //PointCollection redCollection;
-        //PointCollection blueCollection;
-        //PointCollection greenCollection;
-        //PointCollection allCollection;
-        #endregion
-
         public String RboxText
         {
             get { return RBox.Text; }
@@ -266,108 +253,104 @@ namespace WindowsFormsApplication1
             Stretch();
         }
 
-        #region equal
-        //private void histogramEqualization()
-        //{
-        //    imageDisplayed = imageForm.getImage();
+        private int[] createRHistogram(Bitmap bmp)
+        {
+            int[] histogram_r = new int[256];
+            float max = 0;
 
-        //    Bitmap renderedImage = imageDisplayed;
-        //    Bitmap bitmapa = imageDisplayed;
+            for (int i = 0; i < bmp.Width; i++)
+            {
+                for (int j = 0; j < bmp.Height; j++)
+                {
+                    int redValue = bmp.GetPixel(i, j).R;
+                    histogram_r[redValue]++;
+                    if (max < histogram_r[redValue])
+                        max = histogram_r[redValue];
+                }
+            }
 
-        //    byte red;
-        //    byte green;
-        //    byte blue;
-        //    byte c;
-        //    int newPixel = 0;
-        //    equalize();
-        //    // Get the Lookup table for histogram equalization
-        //    List<byte[]> histLUT = LUT;
-        //    for (int i = 0; i < bitmapa.Width; i++)
-        //    {
-        //        for (int j = 0; j < bitmapa.Height; j++)
-        //        {
-        //            if (bitmapa.PixelFormat == System.Drawing.Imaging.PixelFormat.Format8bppIndexed)
-        //            {// Get pixels by R, G, B
-        //                c = GetIndexedPixel(bitmapa, i, j);
-        //                // Set new pixel values using the histogram lookup table
-        //                red = LUT[0][c];
-        //                green = LUT[1][c];
-        //                blue = LUT[2][c];
-        //                SetIndexedPixel(bitmapa, i, j, (byte)((red + green + blue) / 3));
-        //            }
-        //            else
-        //            {
-        //                System.Drawing.Color px = bitmapa.GetPixel(i, j);
-        //                red = LUT[0][px.R];
-        //                green = LUT[1][px.G];
-        //                blue = LUT[2][px.B];
-        //                System.Drawing.Color clr = System.Drawing.Color.FromArgb(0, red, green, blue);
-        //                bitmapa.SetPixel(i, j, clr);
-        //            }
+            return histogram_r;
+        }
 
-        //        }
-        //    }
-        //    //  imageLUT = new ArrayList<int[]>();
-        //    ctrlImage.Source = null;
-        //    MemoryStream ms = new MemoryStream();
-        //    bitmapa.Save(ms, ImageFormat.Bmp);
-        //    ms.Position = 0;
-        //    BitmapImage btImg = new BitmapImage();
-        //    btImg.BeginInit();
-        //    btImg.StreamSource = ms;
-        //    btImg.EndInit();
-        //    ctrlImage.Source = btImg;
-        //    LUT.Clear();
+        private int[] createGHistogram(Bitmap bmp)
+        {
+            int[] histogram_g = new int[256];
+            float max = 0;
 
-        //}
+            for (int i = 0; i < bmp.Width; i++)
+            {
+                for (int j = 0; j < bmp.Height; j++)
+                {
+                    int GValue = bmp.GetPixel(i, j).G;
+                    histogram_g[GValue]++;
+                    if (max < histogram_g[GValue])
+                        max = histogram_g[GValue];
+                }
+            }
 
-        //public void equalize()
-        //{
-        //    byte[] rhistogram = new byte[256];
-        //    byte[] ghistogram = new byte[256];
-        //    byte[] bhistogram = new byte[256];
+            return histogram_g;
+        }
 
-        //    for (int i = 0; i < rhistogram.Length; i++)
-        //    {
-        //        rhistogram[i] = 0;
-        //    }
-        //    for (int i = 0; i < ghistogram.Length; i++)
-        //    {
-        //        ghistogram[i] = 0;
-        //    }
-        //    for (int i = 0; i < bhistogram.Length; i++)
-        //    {
-        //        bhistogram[i] = 0;
-        //    }
-        //    long sumr = 0;
-        //    long sumg = 0;
-        //    long sumb = 0;
-        //    float scale_factor = (float)(255.0 / (ctrlImage.Source.Width * ctrlImage.Source.Height));
-        //    for (int i = 0; i < rhistogram.Length; i++)
-        //    {
-        //        sumr += redHistogram[i];
-        //        int valr = (byte)(sumr * scale_factor);
+        private int[] createBHistogram(Bitmap bmp)
+        {
+            int[] histogram_b = new int[256];
+            float max = 0;
 
-        //        rhistogram[i] = (byte)valr;
+            for (int i = 0; i < bmp.Width; i++)
+            {
+                for (int j = 0; j < bmp.Height; j++)
+                {
+                    int BValue = bmp.GetPixel(i, j).R;
+                    histogram_b[BValue]++;
+                    if (max < histogram_b[BValue])
+                        max = histogram_b[BValue];
+                }
+            }
+           
+            return histogram_b;
+        }
+        private void histogramEqualization()
+        {
+            Bitmap renderedImage = imageDisplayed;
 
-        //        sumg += greenHistogram[i];
-        //        int valg = (byte)(sumg * scale_factor);
-        //        ghistogram[i] = (byte)valg;
+            uint pixels = (uint)renderedImage.Height * (uint)renderedImage.Width;
+            decimal Const = 255 / (decimal)pixels;
 
-        //        sumb += blueHistogram[i];
-        //        int valb = (byte)(sumb * scale_factor);
-        //        bhistogram[i] = (byte)valb;
-        //    }
-        //    LUT.Add(rhistogram);
-        //    LUT.Add(ghistogram);
-        //    LUT.Add(bhistogram);
+            int x, y, R, G, B;
 
-        //}
-        #endregion
+            int[] cdfR = createRHistogram(imageDisplayed);
+            int[] cdfG = createGHistogram(imageDisplayed);
+            int[] cdfB = createBHistogram(imageDisplayed);
+
+            for (int r = 1; r <= 255; r++)
+            {
+                cdfR[r] = cdfR[r] + cdfR[r - 1];
+                cdfG[r] = cdfG[r] + cdfG[r - 1];
+                cdfB[r] = cdfB[r] + cdfB[r - 1];
+            }
+
+            for (y = 0; y < renderedImage.Height; y++)
+            {
+                for (x = 0; x < renderedImage.Width; x++)
+                {
+                    Color pixelColor = renderedImage.GetPixel(x, y);
+
+                    R = (int)((decimal)cdfR[pixelColor.R] * Const);
+                    G = (int)((decimal)cdfG[pixelColor.G] * Const);
+                    B = (int)((decimal)cdfB[pixelColor.B] * Const);
+
+                    Color newColor = Color.FromArgb(R, G, B);
+                    renderedImage.SetPixel(x, y, newColor);
+                }
+            }
+
+            imageForm.ChangeBitmap(renderedImage);
+        }
+    
 
         private void button9_Click(object sender, EventArgs e)
         {
-           //histogramEqualization();
+           histogramEqualization();
         }
     }
     
