@@ -253,53 +253,104 @@ namespace WindowsFormsApplication1
             Stretch();
         }
 
-        //private void histogramEqualization()
-        //{
-        //    imageDisplayed = imageForm.getImage();
+        private int[] createRHistogram(Bitmap bmp)
+        {
+            int[] histogram_r = new int[256];
+            float max = 0;
 
-        //    Bitmap renderedImage = imageDisplayed;
+            for (int i = 0; i < bmp.Width; i++)
+            {
+                for (int j = 0; j < bmp.Height; j++)
+                {
+                    int redValue = bmp.GetPixel(i, j).R;
+                    histogram_r[redValue]++;
+                    if (max < histogram_r[redValue])
+                        max = histogram_r[redValue];
+                }
+            }
 
-        //    uint pixels = (uint)renderedImage.Height * (uint)renderedImage.Width;
-        //    decimal Const = 255 / (decimal)pixels;
+            return histogram_r;
+        }
 
-        //    int x, y, R, G, B;
+        private int[] createGHistogram(Bitmap bmp)
+        {
+            int[] histogram_g = new int[256];
+            float max = 0;
 
-        //    ImageStatistics statistics = new ImageStatistics(renderedImage);
+            for (int i = 0; i < bmp.Width; i++)
+            {
+                for (int j = 0; j < bmp.Height; j++)
+                {
+                    int GValue = bmp.GetPixel(i, j).G;
+                    histogram_g[GValue]++;
+                    if (max < histogram_g[GValue])
+                        max = histogram_g[GValue];
+                }
+            }
 
+            return histogram_g;
+        }
 
-        //    //Create histogram arrays for R,G,B channels
-        //    int[] cdfR = statistics.Red.Values.ToArray();
-        //    int[] cdfG = statistics.Green.Values.ToArray();
-        //    int[] cdfB = statistics.Blue.Values.ToArray();
+        private int[] createBHistogram(Bitmap bmp)
+        {
+            int[] histogram_b = new int[256];
+            float max = 0;
 
-        //    //Convert arrays to cumulative distribution frequency data
-        //    for (int r = 1; r <= 255; r++)
-        //    {
-        //        cdfR[r] = cdfR[r] + cdfR[r - 1];
-        //        cdfG[r] = cdfG[r] + cdfG[r - 1];
-        //        cdfB[r] = cdfB[r] + cdfB[r - 1];
-        //    }
+            for (int i = 0; i < bmp.Width; i++)
+            {
+                for (int j = 0; j < bmp.Height; j++)
+                {
+                    int BValue = bmp.GetPixel(i, j).R;
+                    histogram_b[BValue]++;
+                    if (max < histogram_b[BValue])
+                        max = histogram_b[BValue];
+                }
+            }
+           
+            return histogram_b;
+        }
+        private void histogramEqualization()
+        {
+            Bitmap renderedImage = imageDisplayed;
 
-        //    for (y = 0; y < renderedImage.Height; y++)
-        //    {
-        //        for (x = 0; x < renderedImage.Width; x++)
-        //        {
-        //            Color pixelColor = renderedImage.GetPixel(x, y);
+            uint pixels = (uint)renderedImage.Height * (uint)renderedImage.Width;
+            decimal Const = 255 / (decimal)pixels;
 
-        //            R = (int)((decimal)cdfR[pixelColor.R] * Const);
-        //            G = (int)((decimal)cdfG[pixelColor.G] * Const);
-        //            B = (int)((decimal)cdfB[pixelColor.B] * Const);
+            int x, y, R, G, B;
 
-        //            Color newColor = Color.FromArgb(R, G, B);
-        //            renderedImage.SetPixel(x, y, newColor);
-        //        }
-        //    }
-        //    imageForm.ChangeBitmap(renderedImage);
-        //}
+            int[] cdfR = createRHistogram(imageDisplayed);
+            int[] cdfG = createGHistogram(imageDisplayed);
+            int[] cdfB = createBHistogram(imageDisplayed);
+
+            for (int r = 1; r <= 255; r++)
+            {
+                cdfR[r] = cdfR[r] + cdfR[r - 1];
+                cdfG[r] = cdfG[r] + cdfG[r - 1];
+                cdfB[r] = cdfB[r] + cdfB[r - 1];
+            }
+
+            for (y = 0; y < renderedImage.Height; y++)
+            {
+                for (x = 0; x < renderedImage.Width; x++)
+                {
+                    Color pixelColor = renderedImage.GetPixel(x, y);
+
+                    R = (int)((decimal)cdfR[pixelColor.R] * Const);
+                    G = (int)((decimal)cdfG[pixelColor.G] * Const);
+                    B = (int)((decimal)cdfB[pixelColor.B] * Const);
+
+                    Color newColor = Color.FromArgb(R, G, B);
+                    renderedImage.SetPixel(x, y, newColor);
+                }
+            }
+
+            imageForm.ChangeBitmap(renderedImage);
+        }
+    
 
         private void button9_Click(object sender, EventArgs e)
         {
-           // histogramEqualization();
+           histogramEqualization();
         }
     }
     
